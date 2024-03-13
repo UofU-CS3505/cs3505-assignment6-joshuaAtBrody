@@ -17,6 +17,8 @@ class MainWindow : public QMainWindow
 
 
 private slots:
+    void flashRedButton(bool flashing);
+    void flashBlueButton(bool flashing);
 
 
 public:
