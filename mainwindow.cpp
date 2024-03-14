@@ -6,15 +6,19 @@
 #include "Model.h"
 
 MainWindow::MainWindow(Model& model, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow),
-    image1("../RedBlueSimonBackground.png")
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-    qDebug() << image1;
     ui->setupUi(this);
 
-    // Do everything after this line
+    QPixmap bkgnd("/pics/RedBlueSimonBackground.png");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+    this->setPalette(palette);
 
-    ui->imageLabel->setPixmap(QPixmap::fromImage(image1));
+    this->centralWidget()->setStyleSheet("background-image:url(\"RedBlueSimonBackground.png\"); background-position: center;");
+
+    // Do everything after this line
 
     // Set regular color of the red button to be red + pressed
     ui->RedButton->setStyleSheet( QString("QPushButton {background-color: rgb(200,50,50);} QPushButton:pressed {background-color: rgb(255,150,150);}"));

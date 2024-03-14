@@ -1,9 +1,10 @@
 
 #include "Model.h"
-#include <QSound>
-
+#include <QMediaPlayer>
+#include <QSoundEffect>
 
 Model::Model(QObject *parent) : QObject(parent){
+
     currentPlayerIndexInSequence = 0;
     currentComputerIndexInSequence = 0;
     flashDelay = 1000; // Starting delay, will lower as game increases
@@ -14,33 +15,13 @@ Model::Model(QObject *parent) : QObject(parent){
 
 // Slot
 void Model::startGame(){
-    // GAME START
-    // Disable start button
+    QSoundEffect * sound = new QSoundEffect();
+    sound->setSource(QUrl("qrc:/sounds/gameStart.wav"));
+    sound->setVolume(1);
+    sound->play();
+
     emit turnStartButton(false);
-
-
-
-    // COMPUTER TURN
     timer.singleShot(500, this, &Model::pauseToComputerTurn);
-    // Add a part to the sequence
-    // Lower flash delay and respective timing variables (make game faster)
-    // Disable buttons
-    // For each part in the sequence:
-        //signal the view to flash the respective button
-    // Enable buttons
-    // Goto player turn
-
-    // PLAYER TURN
-    // Get player's signals with slots (buttonClicked)
-    // Compare player's button with respective part in sequence
-        // If incorrect button is pushed, -> signal playerFailed
-        // Else correct button, signal update progress, pause, then continue to computer turn
-
-    // PLAYER FAILED
-    // Reset sequence
-    // Reset timing variables
-    // Reset progress
-    // Goto GAME START
 
 }
 
@@ -79,7 +60,7 @@ void Model::flashButtonsInSequence(int indexInSequence){
 
 //Slot
 void Model::pauseToFlashNextSequence(){
-    if(currentComputerIndexInSequence < sequence.size() - 1){
+    if(currentComputerIndexInSequence < (int) sequence.size() - 1){
         currentComputerIndexInSequence += 1;
         flashButtonsInSequence(currentComputerIndexInSequence);
     } else {
@@ -90,11 +71,20 @@ void Model::pauseToFlashNextSequence(){
 
 //Slot
 void Model::flashRedButton(){
+    QSoundEffect * sound = new QSoundEffect();
+    sound->setSource(QUrl("qrc:/sounds/drum.wav"));
+    sound->setVolume(1);
+    sound->play();
+
     emit viewRedFlash(true);
 }
 
 //Slot
 void Model::flashBlueButton(){
+    QSoundEffect * sound = new QSoundEffect();
+    sound->setSource(QUrl("qrc:/sounds/hihat.wav"));
+    sound->setVolume(1);
+    sound->play();
     emit viewBlueFlash(true);
 }
 
@@ -111,6 +101,10 @@ void Model::endFlashBlueButton(){
 
 // Slot
 void Model::buttonRedClicked(){
+    QSoundEffect * sound = new QSoundEffect();
+    sound->setSource(QUrl("qrc:/sounds/drum.wav"));
+    sound->setVolume(1);
+    sound->play();
 
     if(sequence[currentPlayerIndexInSequence] != 0){
         // If player failed
@@ -121,7 +115,7 @@ void Model::buttonRedClicked(){
         currentPlayerIndexInSequence += 1;
         emit updateProgress((100*currentPlayerIndexInSequence)/sequence.size());
 
-        if(currentPlayerIndexInSequence == sequence.size()){
+        if(currentPlayerIndexInSequence == (int) sequence.size()){
             currentPlayerIndexInSequence = 0;
             timer.singleShot(700, this, &Model::pauseToLookAt100Percent);
         }
@@ -130,6 +124,11 @@ void Model::buttonRedClicked(){
 
 // Slot
 void Model::buttonBlueClicked(){
+    QSoundEffect * sound = new QSoundEffect();
+    sound->setSource(QUrl("qrc:/sounds/hihat.wav"));
+    sound->setVolume(1);
+    sound->play();
+
     if(sequence[currentPlayerIndexInSequence] != 1){
         // If player failed
         emit playerFailed(true);
@@ -139,7 +138,7 @@ void Model::buttonBlueClicked(){
         currentPlayerIndexInSequence += 1;
         emit updateProgress((100*currentPlayerIndexInSequence)/sequence.size());
 
-        if(currentPlayerIndexInSequence == sequence.size()){
+        if(currentPlayerIndexInSequence == (int) sequence.size()){
             currentPlayerIndexInSequence = 0;
             timer.singleShot(700, this, &Model::pauseToLookAt100Percent);
         }
@@ -158,6 +157,11 @@ void Model::pauseToComputerTurn(){
 }
 
 void Model::reset(){
+    QSoundEffect * sound = new QSoundEffect();
+    sound->setSource(QUrl("qrc:/sounds/GameLost.wav"));
+    sound->setVolume(1);
+    sound->play();
+
     emit switchAbilityOfColorButtons(false);
     sequence.clear();
     currentPlayerIndexInSequence = 0;
@@ -173,7 +177,5 @@ void Model::restartGame(){
     emit updateProgress(0);
     startGame();
 }
-
-
 
 
