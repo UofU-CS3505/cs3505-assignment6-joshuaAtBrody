@@ -1,6 +1,6 @@
 
 #include "Model.h"
-
+#include <QSound>
 
 
 Model::Model(QObject *parent) : QObject(parent){
