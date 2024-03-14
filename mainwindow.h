@@ -17,7 +17,16 @@ class MainWindow : public QMainWindow
 
 
 private slots:
+    ///
+    /// \brief flashRedButton set blue button's color to pure red or dull red
+    /// \param flashing true for pure red, false for dull red
+    ///
     void flashRedButton(bool flashing);
+
+    ///
+    /// \brief flashBlueButton set blue button's color to pure blue or dull blue
+    /// \param flashing true for pure blue, false for dull blue
+    ///
     void flashBlueButton(bool flashing);
 
 

@@ -55,16 +55,19 @@ void Model::flashButtonsInSequence(int indexInSequence){
         timer.singleShot(0, this, &Model::flashBlueButton);
         timer.singleShot(flashDelay, this, &Model::endFlashBlueButton);
     }
+
+    // Pause between computer's flashing
     timer.singleShot(flashDelay + waitDelay, this, &Model::pauseToFlashNextSequence);
 }
 
 //Slot
 void Model::pauseToFlashNextSequence(){
     if(currentComputerIndexInSequence < (int) sequence.size() - 1){
+        // Recursive
         currentComputerIndexInSequence += 1;
         flashButtonsInSequence(currentComputerIndexInSequence);
     } else {
-        // Enable buttons
+        // Enable buttons when computer has finsihed flashing sequence.
         emit switchAbilityOfColorButtons(true);
     }
 }
@@ -85,6 +88,7 @@ void Model::flashBlueButton(){
     sound->setSource(QUrl("qrc:/sounds/hihat.wav"));
     sound->setVolume(1);
     sound->play();
+
     emit viewBlueFlash(true);
 }
 
@@ -112,6 +116,7 @@ void Model::buttonRedClicked(){
         reset();
         return;
     } else {
+        // Player didn't fail display progress and continue
         currentPlayerIndexInSequence += 1;
         emit updateProgress((100*currentPlayerIndexInSequence)/sequence.size());
 
@@ -135,6 +140,7 @@ void Model::buttonBlueClicked(){
         reset();
         return;
     } else {
+        // Player didn't fail display progress and continue
         currentPlayerIndexInSequence += 1;
         emit updateProgress((100*currentPlayerIndexInSequence)/sequence.size());
 
